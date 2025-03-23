@@ -1,14 +1,16 @@
 churn_env/
+build/
+dist/
+__pycache__/
+*.egg-info/
+.ipynb_checkpoints/
+*.log
 
 *.csv
 *.tsv
 *.parquet
 *.h5
 *.npy
-
-__pycache__/
-.ipynb_checkpoints/
-*.log
 
 .env
 .DS_Store
