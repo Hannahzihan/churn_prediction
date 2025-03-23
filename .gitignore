@@ -1,0 +1,17 @@
+churn_env/
+
+*.csv
+*.tsv
+*.parquet
+*.h5
+*.npy
+
+__pycache__/
+.ipynb_checkpoints/
+*.log
+
+.env
+.DS_Store
+
+!data\data_final\labeled_data.csv
+!undata\data_final\labeled_data.csv
