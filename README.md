@@ -1,9 +1,9 @@
-Project Setup Guidance for churn_prediction
+## Project Setup Guidance for churn_prediction
 
-This guide explains how to set up and use the churn_prediction repository on any local machine. It is intended for collaborators or for transferring the project to a new computer.
+This guide explains how to set up and use the churn_prediction repository on any local machine. It is intended for transferring the project to a new computer.
 
-1. Repository Structure
-
+## 1. Repository Structure
+```
 churn_prediction/
 ├── setup.py
 ├── requirements.txt             
@@ -13,10 +13,11 @@ churn_prediction/
 │   │   ├── Benchmark_Models.ipynb # an interpretable logistic regression model (GLM) and the widely adopted LightGBM
 │   │   └── Model_Comparison.ipynb # comparsion between four models
 ├── data/     
-│   ├── data_raw/             # Raw data from Kaggle       
-│   ├── data_intermediate/    # Intermediat data
-│   ├── data_feature/         # Features extracted
-│   └── data_final/           # Final data used for training
+│   ├── data_raw/                  # Raw data from Kaggle       
+│   ├── data_intermediate/         # Intermediat data
+│   ├── data_feature/              # Features extracted
+│   ├── data_final/                # Final data used for training
+│   └── data_preprocessing.ipynb   # How to process from the original data
 ├── src/                      # Source code organized by module
 │   ├── __init__.py
 │   ├── data/                 # Data preprocessing and resampling
@@ -44,78 +45,38 @@ churn_prediction/
 │   ├── lgbm_model.pkl
 │   ├── mlp_model.pt
 │   ├── mlp_ssl_model.pt
+```
 
-2. Environment Setup
+The `notebooks/` directory contains interactive development files used throughout the project:
+  
+- `MLP_with_SSL.ipynb`  
+  Implements **a neural network (MLP)** to predict user churn and introduces a **Semi-Supervised Learning** strategy via pseudo-labeling on unlabeled data. Includes model training, evaluation, and comparison against supervised MLP.
+
+- `Benchmark_Models.ipynb`  
+  Trains and evaluates two baseline models:
+  - **GLM (Logistic Regression)**: An interpretable linear model.
+  - **LightGBM**: A gradient-boosted tree model known for efficiency and performance.
+
+- `Model_Comparison.ipynb`  
+  Brings together results from all models—GLM, LightGBM, MLP, and SSL-MLP—for comparison using classification metrics (Precision, Recall, F1, AUC) and visualizations (ROC/PR curves, SHAP explanations).
+
+## 2. Environment Setup
 
 Step 1: Clone the Repository
-
-git clone <repo-url>
+```
+git clone https://github.com/Hannahzihan/churn_prediction.git
 cd churn_prediction
-
+```
 Step 2: Create a Virtual Environment
-
+```
 python -m venv churn_env
 source churn_env/bin/activate    # or: churn_env\Scripts\activate (Windows)
-
+```
 Step 3: Install Dependencies
-
+```
 pip install -r requirements.txt
-
+```
 Alternatively, if using as a package:
-
+```
 pip install -e .
-
-3. Usage Tips
-
-Run Notebook
-
-Launch Jupyter Lab or Notebook and open files under /notebooks/:
-
-jupyter lab
-
-Importing Project Modules
-
-Ensure your working directory is the project root, and use:
-
-from src.data.preprocess import data_preprocessing
-from src.model.MLPClassifier import MLPClassifier
-
-If you encounter import errors in notebooks, you can append the root path manually:
-
-import sys, os
-sys.path.append(os.path.abspath(".."))  # from inside `notebooks/`
-
-4. Common Issues
-
-Problem: ModuleNotFoundError: No module named 'src'
-
-Ensure you're running the notebook from the root or have updated sys.path
-
-Problem: file:// path in requirements.txt
-
-Replace any local path like churn-prediction @ file://... with -e . or remove entirely
-
-5. Updating Dependencies
-
-After modifying code or adding dependencies:
-
-pip freeze > requirements.txt
-
-Or manually maintain setup.py and requirements.txt.
-
-6. Reproduce in New Machine
-
-From a new machine:
-
-git clone <repo-url>
-cd churn_prediction
-python -m venv churn_env
-source churn_env/bin/activate
-pip install -e .
-
-7. Contact
-
-If any issues arise or help is needed, please refer to the project's README or contact the maintainer.
-
-This guidance ensures consistent setup, usage, and collaboration across environments and users.
-
+```
