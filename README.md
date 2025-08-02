@@ -1,82 +1,74 @@
-## Project Setup Guidance for churn_prediction
+# KKBOX User Churn Prediction
 
-This guide explains how to set up and use the churn_prediction repository on any local machine. It is intended for transferring the project to a new computer.
+This project builds and evaluates machine learning models to predict user churn for a subscription-based music streaming platform. It leverages transactional records, user behavior logs, and demographic features from the KKBOX dataset, with additional Semi-Supervised Learning techniques. This guide explains how to set up and use the churn_prediction repository on any local machine.
 
-## 1. Repository Structure
+## 1. Data Overview
+
+The `data/` directory contains all data used and generated:
+
+## data_raw/
+Raw data files downloaded from the [Kaggle KKBOX Churn Prediction Challenge](https://www.kaggle.com/competitions/kkbox-churn-prediction-challenge). These files are **not modified** and serve as the initial data source.
+
+Typical Files:
+- `train.csv`, `train_v2.csv`: Labeled user data for training.
+- `sample_submission_v2.csv`: Unlabeled data used in SSL (semi-supervised learning).
+- `user_logs.csv`, `user_logs_v2.csv`: Daily usage records.
+- `transactions.csv`, `transactions_v2.csv`: Payment and subscription information.
+- `members.csv`, `members_v3.csv`: User demographic details.
+
+## data_intermediate/
+Partially processed datasets after initial cleaning, joining, or filtering. Used to facilitate feature engineering.
+
+## data_feature/
+Constructed user-level features such as aggregated listening behavior, subscription patterns, and login activity.
+
+Examples:
+- `jan_log_user_features.csv`: Aggregated features for January logs.
+- `transaction_features.csv`: Aggregated features derived from transaction history.
+
+## data_final/
+Final datasets used for model training and evaluation.
+
+- `labeled_data.csv`: Feature matrix with known churn labels.
+- `unlabeled_data.csv`: Feature matrix without labels (used in semi-supervised learning).
+Stored in [Churn Prediction Dataset (Processed)](https://www.kaggle.com/datasets/hannahzz1116/churn-prediction) for convenience.
+
+## 2. Jupyter Notebooks Overview
+
+The `notebooks/` directory contains all development and evaluation workflows:
+
+- **`Multilayer_Perceptron.ipynb`**  
+  Implements a **Multi-Layer Perceptron (MLP)** for churn prediction
+
+- **`Semi-supervised_Learning.ipynb`**  
+  Integrates a **Semi-Supervised Learning (SSL)** strategy using pseudo-labeling.
+
+- **`Benchmark_Models.ipynb`**  
+  Trains two classic baselines:  
+  - **GLM (Logistic Regression)** for interpretability  
+  - **LightGBM** for scalable performance
+
+- **`Model_Comparison.ipynb`**  
+  Compares the performance of all models using:
+  - Evaluation metrics (F1, AUC, Precision, Recall)  
+  - Visualizations (ROC/PR curves, SHAP analysis)
+
+## 3. Environment Setup
+
+### Step 1: Clone the Repository
 ```
-churn_prediction/
-├── setup.py
-├── requirements.txt             
-├── notebooks/                # Jupyter notebooks for model development and evaluation
-│   ├── Benchmark_Models.ipynb.py
-│   │   ├── MLP_with_SSL.ipynb     # MLP and best MLP with Semi-Supervised learning
-│   │   ├── Benchmark_Models.ipynb # an interpretable logistic regression model (GLM) and the widely adopted LightGBM
-│   │   └── Model_Comparison.ipynb # comparsion between four models
-├── data/     
-│   ├── data_raw/                  # Raw data from Kaggle       
-│   ├── data_intermediate/         # Intermediat data
-│   ├── data_feature/              # Features extracted
-│   ├── data_final/                # Final data used for training
-│   └── data_preprocessing.ipynb   # How to process from the original data
-├── src/                      # Source code organized by module
-│   ├── __init__.py
-│   ├── data/                 # Data preprocessing and resampling
-│   │   ├── __init__.py
-│   │   ├── preprocess.py
-│   │   └── resample.py
-│   ├── inference/            # Inference utilities
-│   │   ├── __init__.py
-│   │   ├── model_loading.py
-│   │   └── predict.py
-│   ├── model/                # Model architectures
-│   │   ├── glm.py
-│   │   ├── lgbm.py
-│   │   ├── mlp.py
-│   │   └── MLPClassifier.py
-│   ├── training/             # Training loops and hyperparameter search
-│   │   ├── __init__.py
-│   │   └── train.py
-│   │   └── tune.py
-│   └── visualization/        # Plotting tools
-│       ├── __init__.py
-│       └── plot_curves.py
-├── models/                   # All models trained
-│   ├── glm_model.pkl
-│   ├── lgbm_model.pkl
-│   ├── mlp_model.pt
-│   ├── mlp_ssl_model.pt
-```
-
-The `notebooks/` directory contains interactive development files used throughout the project:
-  
-- `MLP_with_SSL.ipynb`  
-  Implements **a neural network (MLP)** to predict user churn and introduces a **Semi-Supervised Learning** strategy via pseudo-labeling on unlabeled data. Includes model training, evaluation, and comparison against supervised MLP.
-
-- `Benchmark_Models.ipynb`  
-  Trains and evaluates two baseline models:
-  - **GLM (Logistic Regression)**: An interpretable linear model.
-  - **LightGBM**: A gradient-boosted tree model known for efficiency and performance.
-
-- `Model_Comparison.ipynb`  
-  Brings together results from all models—GLM, LightGBM, MLP, and SSL-MLP—for comparison using classification metrics (Precision, Recall, F1, AUC) and visualizations (ROC/PR curves, SHAP explanations).
-
-## 2. Environment Setup
-
-Step 1: Clone the Repository
-```
-git clone https://github.com/Hannahzihan/churn_prediction.git
+git clone https://github.com/MLecon/project-Hannahzihan
 cd churn_prediction
 ```
-Step 2: Create a Virtual Environment
+### Step 2: Create a Virtual Environment
 ```
 python -m venv churn_env
 source churn_env/bin/activate    # or: churn_env\Scripts\activate (Windows)
 ```
-Step 3: Install Dependencies
+### Step 3: Install Dependencies
 ```
 pip install -r requirements.txt
 ```
-Alternatively, if using as a package:
 ```
 pip install -e .
 ```
